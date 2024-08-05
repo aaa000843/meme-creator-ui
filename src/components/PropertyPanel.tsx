@@ -1,13 +1,60 @@
 import * as fabric from 'fabric';
+import { set } from 'lodash';
 import React, { useEffect, useState } from 'react';
+
+import logger from '@/lib/logger';
 
 import { useCanvasContext } from '@/contexts/Canvas.context';
 
+const propertyMap: { [key: string]: string } = {
+  left: 'left',
+  top: 'top',
+  width: 'width',
+  height: 'height',
+  angle: 'angle',
+  fill: 'fill',
+  stroke: 'stroke',
+  strokeWidth: 'strokeWidth',
+  fontFamily: 'fontFamily',
+  fontSize: 'fontSize',
+  fontWeight: 'fontWeight',
+  fontStyle: 'fontStyle',
+  underline: 'underline',
+  textFill: 'fill',
+  backgroundColor: 'backgroundColor',
+  shadowColor: 'shadow.color',
+  shadowOffsetX: 'shadow.offsetX',
+  shadowOffsetY: 'shadow.offsetY',
+  shadowBlur: 'shadow.blur',
+};
+
 const PropertiesPanel: React.FC = () => {
   const { state } = useCanvasContext();
-  const [selectedObject, setSelectedObject] = useState<fabric.Object | null>(
-    null,
-  );
+  const [selectedObject, setSelectedObject] = useState<
+    fabric.Object | undefined
+  >(undefined);
+
+  const [properties, setProperties] = useState({
+    left: 0,
+    top: 0,
+    width: 0,
+    height: 0,
+    angle: 0,
+    fill: '',
+    stroke: '',
+    strokeWidth: 1,
+    fontFamily: '',
+    fontSize: 0,
+    fontWeight: 'normal' as number | string,
+    fontStyle: 'normal',
+    underline: false,
+    textFill: '',
+    backgroundColor: '',
+    shadowColor: '',
+    shadowOffsetX: 0,
+    shadowOffsetY: 0,
+    shadowBlur: 0,
+  });
 
   useEffect(() => {
     const canvas = state.canvas;
@@ -15,17 +62,43 @@ const PropertiesPanel: React.FC = () => {
 
     const updateSelectedObject = () => {
       const activeObject = canvas.getActiveObject();
-      setSelectedObject(activeObject ?? null);
+      logger({ activeObject }, 'PropertyPanel.tsx line 63');
+      if (activeObject) {
+        setSelectedObject(activeObject);
+        setProperties({
+          left: activeObject.left ?? 0,
+          top: activeObject.top ?? 0,
+          width: activeObject.width ?? 0,
+          height: activeObject.height ?? 0,
+          angle: activeObject.angle ?? 0,
+          fill: (activeObject.fill as string) ?? '',
+          stroke: (activeObject.stroke as string) ?? '',
+          strokeWidth: activeObject.strokeWidth ?? 1,
+          fontFamily: (activeObject as fabric.Text).fontFamily ?? '',
+          fontSize: (activeObject as fabric.Text).fontSize ?? 0,
+          fontWeight: (activeObject as fabric.Text).fontWeight ?? 'normal',
+          fontStyle: (activeObject as fabric.Text).fontStyle ?? 'normal',
+          underline: (activeObject as fabric.Text).underline ?? false,
+          textFill: ((activeObject as fabric.Text).fill as string) ?? '',
+          backgroundColor:
+            ((activeObject as fabric.Text).backgroundColor as string) ?? '',
+          shadowColor: (activeObject.shadow?.color as string) ?? '#000000',
+          shadowOffsetX: activeObject.shadow?.offsetX ?? 0,
+          shadowOffsetY: activeObject.shadow?.offsetY ?? 0,
+          shadowBlur: activeObject.shadow?.blur ?? 0,
+        });
+      }
     };
 
     canvas.on('selection:created', updateSelectedObject);
     canvas.on('selection:updated', updateSelectedObject);
-    canvas.on('selection:cleared', () => setSelectedObject(null));
+    canvas.on('object:modified', updateSelectedObject);
+    canvas.on('selection:cleared', () => setSelectedObject(undefined));
 
     return () => {
       canvas.off('selection:created', updateSelectedObject);
       canvas.off('selection:updated', updateSelectedObject);
-      canvas.off('selection:cleared', () => setSelectedObject(null));
+      canvas.off('selection:cleared', () => setSelectedObject(undefined));
     };
   }, [state.canvas]);
 
@@ -35,12 +108,19 @@ const PropertiesPanel: React.FC = () => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleChange = (property: string, value: any) => {
-    if (!selectedObject) return;
-    selectedObject.set(property, value);
-    state.canvas?.renderAll();
+    const mappedProperty = propertyMap[property];
+    setProperties((prevProperties) => ({
+      ...prevProperties,
+      [property]: value,
+    }));
+
+    if (selectedObject) {
+      set(selectedObject, mappedProperty, value);
+      state.canvas?.renderAll();
+    }
   };
 
-  const isText = selectedObject instanceof fabric.Text;
+  const isText = selectedObject instanceof fabric.FabricText;
 
   return (
     <div className='p-4 bg-gray-100 border-l'>
@@ -53,7 +133,7 @@ const PropertiesPanel: React.FC = () => {
           <label>Left:</label>
           <input
             type='number'
-            value={selectedObject.left ?? 0}
+            value={properties.left ?? 0}
             onChange={(e) => handleChange('left', parseFloat(e.target.value))}
           />
         </div>
@@ -61,7 +141,7 @@ const PropertiesPanel: React.FC = () => {
           <label>Top:</label>
           <input
             type='number'
-            value={selectedObject.top ?? 0}
+            value={properties.top ?? 0}
             onChange={(e) => handleChange('top', parseFloat(e.target.value))}
           />
         </div>
@@ -73,7 +153,7 @@ const PropertiesPanel: React.FC = () => {
           <label>Width:</label>
           <input
             type='number'
-            value={selectedObject.width ?? 0}
+            value={properties.width ?? 0}
             onChange={(e) => handleChange('width', parseFloat(e.target.value))}
           />
         </div>
@@ -81,7 +161,7 @@ const PropertiesPanel: React.FC = () => {
           <label>Height:</label>
           <input
             type='number'
-            value={selectedObject.height ?? 0}
+            value={properties.height ?? 0}
             onChange={(e) => handleChange('height', parseFloat(e.target.value))}
           />
         </div>
@@ -93,7 +173,7 @@ const PropertiesPanel: React.FC = () => {
           <label>Angle:</label>
           <input
             type='number'
-            value={selectedObject.angle ?? 0}
+            value={properties.angle ?? 0}
             onChange={(e) => handleChange('angle', parseFloat(e.target.value))}
           />
         </div>
@@ -108,7 +188,7 @@ const PropertiesPanel: React.FC = () => {
               <label>Font Family:</label>
               <input
                 type='text'
-                value={(selectedObject as fabric.Text).fontFamily ?? ''}
+                value={properties.fontFamily ?? ''}
                 onChange={(e) => handleChange('fontFamily', e.target.value)}
               />
             </div>
@@ -116,7 +196,7 @@ const PropertiesPanel: React.FC = () => {
               <label>Font Size:</label>
               <input
                 type='number'
-                value={(selectedObject as fabric.Text).fontSize ?? 0}
+                value={properties.fontSize ?? 0}
                 onChange={(e) =>
                   handleChange('fontSize', parseFloat(e.target.value))
                 }
@@ -130,9 +210,7 @@ const PropertiesPanel: React.FC = () => {
               <label>
                 <input
                   type='checkbox'
-                  checked={
-                    (selectedObject as fabric.Text).fontWeight === 'bold'
-                  }
+                  checked={properties.fontWeight === 'bold'}
                   onChange={(e) =>
                     handleChange(
                       'fontWeight',
@@ -147,9 +225,7 @@ const PropertiesPanel: React.FC = () => {
               <label>
                 <input
                   type='checkbox'
-                  checked={
-                    (selectedObject as fabric.Text).fontStyle === 'italic'
-                  }
+                  checked={properties.fontStyle === 'italic'}
                   onChange={(e) =>
                     handleChange(
                       'fontStyle',
@@ -164,7 +240,7 @@ const PropertiesPanel: React.FC = () => {
               <label>
                 <input
                   type='checkbox'
-                  checked={(selectedObject as fabric.Text).underline}
+                  checked={properties.underline}
                   onChange={(e) => handleChange('underline', e.target.checked)}
                 />
                 Underline
@@ -178,7 +254,7 @@ const PropertiesPanel: React.FC = () => {
               <label>Text Color:</label>
               <input
                 type='color'
-                value={(selectedObject as fabric.Text).fill as string}
+                value={properties.fill as string}
                 onChange={(e) => handleChange('fill', e.target.value)}
               />
             </div>
@@ -186,11 +262,47 @@ const PropertiesPanel: React.FC = () => {
               <label>Background Color:</label>
               <input
                 type='color'
-                value={
-                  (selectedObject as fabric.Text).backgroundColor as string
-                }
+                value={properties.backgroundColor as string}
                 onChange={(e) =>
                   handleChange('backgroundColor', e.target.value)
+                }
+              />
+            </div>
+            <div>
+              <label>Shadow Color:</label>
+              <input
+                type='color'
+                value={(properties.shadowColor as string) || '#000000'}
+                onChange={(e) => handleChange('shadowColor', e.target.value)}
+              />
+            </div>
+            <div>
+              <label>Shadow Offset X:</label>
+              <input
+                type='number'
+                value={(properties.shadowOffsetX as number) || 0}
+                onChange={(e) =>
+                  handleChange('shadowOffsetX', parseInt(e.target.value, 10))
+                }
+              />
+            </div>
+            <div>
+              <label>Shadow Offset Y:</label>
+              <input
+                type='number'
+                value={(properties.shadowOffsetY as number) || 0}
+                onChange={(e) =>
+                  handleChange('shadowOffsetY', parseInt(e.target.value, 10))
+                }
+              />
+            </div>
+            <div>
+              <label>Shadow Blur:</label>
+              <input
+                type='number'
+                value={(properties.shadowBlur as number) || 0}
+                onChange={(e) =>
+                  handleChange('shadowBlur', parseInt(e.target.value, 10))
                 }
               />
             </div>

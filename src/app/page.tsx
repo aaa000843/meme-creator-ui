@@ -6,6 +6,7 @@ import * as React from 'react';
 import ExportModal from '@/components/ExportModal';
 import FontGallery from '@/components/FontGallery';
 import ImageGallery from '@/components/ImageGallery';
+import ImageUploadInput from '@/components/ImageUploadInput';
 import Header from '@/components/layout/Header';
 import TextLink from '@/components/links/TextLink';
 import PropertiesPanel from '@/components/PropertyPanel';
@@ -38,6 +39,7 @@ export default function HomePage() {
             <div className='w-[140px]'>
               <div className='flex-col'>
                 <ImageGallery />
+                <ImageUploadInput />
                 <FontGallery />
                 {/* <HistoryPanel /> */}
               </div>

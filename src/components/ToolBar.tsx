@@ -49,19 +49,6 @@ const Toolbar: React.FC = () => {
         Rect
       </button>
       <button
-        onClick={() => dispatch({ type: 'UNDO' })}
-        className='bg-gray-500 text-white px-4 py-2 rounded'
-      >
-        Undo
-      </button>
-      <button
-        onClick={() => dispatch({ type: 'REDO' })}
-        className='bg-gray-500 text-white px-4 py-2 rounded'
-      >
-        Redo
-      </button>
-
-      <button
         className='px-4 py-2 bg-blue-600 text-white rounded'
         onClick={() => dispatch({ type: 'OPEN_EXPORT_MODAL' })}
       >
