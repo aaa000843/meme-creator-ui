@@ -1,8 +1,10 @@
-import axios from 'axios';
 import React, { useState } from 'react';
+
+import { usePicture } from '@/contexts/Picture.context';
 
 const ImageUpload: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
+  const { uploadPicture } = usePicture();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -13,12 +15,9 @@ const ImageUpload: React.FC = () => {
   const handleUpload = async () => {
     if (!file) return;
 
-    const formData = new FormData();
-    formData.append('image', file);
-
     try {
-      await axios.post('/api/images/upload', formData);
-      alert('Image uploaded successfully');
+      await uploadPicture(file);
+      await alert('Image uploaded successfully');
     } catch (error) {
       console.error('Error uploading image', error);
     }

@@ -3,15 +3,19 @@
 import Head from 'next/head';
 import * as React from 'react';
 
+import { cn } from '@/lib/utils';
+
+import Button from '@/components/buttons/Button';
+import Dialog from '@/components/Dialog';
 import ExportModal from '@/components/ExportModal';
 import FontGallery from '@/components/FontGallery';
 import ImageGallery from '@/components/ImageGallery';
 import ImageUploadInput from '@/components/ImageUploadInput';
 import Header from '@/components/layout/Header';
-import TextLink from '@/components/links/TextLink';
 import PropertiesPanel from '@/components/PropertyPanel';
 import SaveConfirmationModal from '@/components/SaveConfirmationModal';
 import Toolbar from '@/components/ToolBar';
+import Typo from '@/components/typography/Typo';
 import DesignCanvas from '@/components/UserCanvas';
 
 import { useCanvasContext } from '@/contexts/Canvas.context';
@@ -22,6 +26,7 @@ import { useCanvasContext } from '@/contexts/Canvas.context';
 
 export default function HomePage() {
   const { state, dispatch } = useCanvasContext();
+  const [showDialog, setShowDialog] = React.useState<boolean>(false);
 
   const handleSave = () => {
     // Save logic here
@@ -38,7 +43,10 @@ export default function HomePage() {
           <div className='flex-grow container mx-auto p-4 flex'>
             <div className='w-[140px]'>
               <div className='flex-col'>
-                <ImageGallery />
+                <Button onClick={() => setShowDialog(true)}>
+                  Show Gallery
+                </Button>
+
                 <ImageUploadInput />
                 <FontGallery />
                 {/* <HistoryPanel /> */}
@@ -67,11 +75,21 @@ export default function HomePage() {
             onClose={() => dispatch({ type: 'CLOSE_SAVE_MODAL' })}
             onSave={handleSave}
           />
+          <Dialog
+            isOpen={showDialog}
+            hasCloseBtn
+            onClose={() => setShowDialog(false)}
+            classes={{ modal: cn('') }}
+          >
+            <div className='p-2'>
+              <Typo>Image gallery</Typo>
+            </div>
+            <div className='p-2'>
+              <ImageGallery />
+            </div>
+          </Dialog>
 
-          <footer className='absolute bottom-2 text-gray-700'>
-            © {new Date().getFullYear()} By{' '}
-            <TextLink href='https://mithyalabs.com'>Mithyalabs</TextLink>
-          </footer>
+          <footer className='absolute bottom-2 text-gray-700'></footer>
         </div>
       </section>
     </main>

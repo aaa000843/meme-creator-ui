@@ -9,7 +9,7 @@ const nextConfig = {
 
   // add domain whitelist
   images: {
-    domains: ['images.unsplash.com'],
+    domains: ['images.unsplash.com', 'ik.imagekit.io'],
   },
 
   webpack(config) {

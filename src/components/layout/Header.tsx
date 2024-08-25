@@ -20,7 +20,7 @@ const Header: React.FC<IHeaderProps> = ({ className, ...rest }) => {
     >
       <div className='layout flex h-14 items-center justify-between'>
         <UnstyledLink href='/' className='font-bold hover:text-gray-600'>
-          Home
+          Meme Creator
         </UnstyledLink>
         <nav>
           <ul className='flex items-center justify-between space-x-4'>

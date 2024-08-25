@@ -15,6 +15,7 @@ const DesignCanvas: React.FC = () => {
       height: 600,
       width: 800,
       backgroundColor: 'white',
+      preserveObjectStacking: true,
     });
 
     canvasRef.current?.addEventListener('contextmenu', (e) => {
