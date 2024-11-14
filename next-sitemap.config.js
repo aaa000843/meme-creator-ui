@@ -5,7 +5,7 @@
 module.exports = {
   // !INITIAL_CONFIG Change the siteUrl
   /** Without additional '/' on the end, e.g. https://memezilla.com */
-  siteUrl: 'https://memezilla.com',
+  siteUrl: 'https://resume-exporter.sassflair.com',
   generateRobotsTxt: true,
   robotsTxtOptions: {
     policies: [{ userAgent: '*', allow: '/' }],
