@@ -1,14 +1,16 @@
 'use client';
+
 import { useRouter, useSearchParams } from 'next/navigation';
-import React, { useState } from 'react';
+import React, { Suspense, useState } from 'react';
 
 import { useAuth } from '@/contexts/Auth.context';
 
-const UpdatePasswordPage: React.FC = () => {
+const UpdatePasswordForm: React.FC = () => {
   const { updatePassword } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
+
   const [newPassword, setNewPassword] = useState('');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
@@ -44,6 +46,14 @@ const UpdatePasswordPage: React.FC = () => {
       {message && <p>{message}</p>}
       {error && <p>{error}</p>}
     </div>
+  );
+};
+
+const UpdatePasswordPage: React.FC = () => {
+  return (
+    <Suspense fallback={<p>Loading...</p>}>
+      <UpdatePasswordForm />
+    </Suspense>
   );
 };
 
