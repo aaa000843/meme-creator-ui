@@ -1,5 +1,4 @@
 export interface Picture {
-  id: string;
   fileId: string;
   name: string;
   url: string;
@@ -11,4 +10,5 @@ export interface Picture {
   thumbnailUrl: string;
   createdAt: string;
   updatedAt: string;
+  _id: string;
 }

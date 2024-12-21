@@ -1,55 +1,38 @@
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 
 import NextImage from '@/components/NextImage';
 
-interface Image {
-  id: string;
-  url: string;
-  tags: string[];
-}
+import { usePicture } from '@/contexts/Picture.context';
 
 const ImageGalleryCarousel: React.FC = () => {
-  const [images, setImages] = useState<Image[]>([]);
+  const { pictures, fetchPictures, deletePicture } = usePicture();
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, _] = useState(10);
 
   useEffect(() => {
-    const fetchImages = async () => {
-      try {
-        const response = await axios.get(
-          `/api/images?page=${page}&pageSize=${pageSize}`,
-        );
-        setImages(response.data.images);
-      } catch (error) {
-        console.error('Error fetching images', error);
-      }
-    };
+    fetchPictures();
 
-    fetchImages();
-  }, [page, pageSize]);
+    return () => {
+      fetchPictures();
+    };
+  }, []);
 
   const handleDeleteImage = async (id: string) => {
-    try {
-      await axios.delete(`/api/images/${id}`);
-      setImages(images.filter((image) => image.id !== id));
-    } catch (error) {
-      console.error('Error deleting image', error);
-    }
+    deletePicture(id);
   };
 
   return (
     <div>
       <div>
-        {images.map((image) => (
-          <div key={image.id}>
-            <NextImage src={image.url} alt='Image' layout='fill' />
+        {pictures.map((image) => (
+          <div key={image._id}>
+            <NextImage src={image.url} width={100} height={100} alt='Image' />
             <div>
-              {image.tags.map((tag) => (
+              {/* {image.tags.map((tag) => (
                 <span key={tag}>{tag}</span>
-              ))}
+              ))} */}
             </div>
-            <button onClick={() => handleDeleteImage(image.id)}>Delete</button>
+            <button onClick={() => handleDeleteImage(image._id)}>Delete</button>
           </div>
         ))}
       </div>

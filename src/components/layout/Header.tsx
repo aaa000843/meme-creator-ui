@@ -5,8 +5,8 @@ import { cn } from '@/lib/utils';
 import UnstyledLink from '@/components/links/UnstyledLink';
 
 const links = [
-  { href: '/', label: 'Route 1' },
-  { href: '/', label: 'Route 2' },
+  { href: '/', label: 'Edit Gallery' },
+  // { href: '/', label: 'Route 2' },
 ];
 
 export interface IHeaderProps {

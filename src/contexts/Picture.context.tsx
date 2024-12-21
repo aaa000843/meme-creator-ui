@@ -8,6 +8,7 @@ interface PictureContextType {
   pictures: Picture[];
   uploadPicture: (file: File) => Promise<void>;
   fetchPictures: () => Promise<void>;
+  deletePicture: (id: string) => Promise<void>;
 }
 
 const PictureContext = createContext<PictureContextType | undefined>(undefined);
@@ -39,13 +40,21 @@ export const PictureProvider: React.FC<{ children: ReactNode }> = ({
     setPictures(response);
   };
 
+  const deletePicture = async (id: string) => {
+    await request(`/design-assets/${id}`, {
+      method: 'DELETE',
+    });
+    setPictures((prev) => prev.filter((picture) => picture._id !== id));
+  };
+
   return (
-    <PictureContext.Provider value={{ pictures, uploadPicture, fetchPictures }}>
+    <PictureContext.Provider
+      value={{ pictures, uploadPicture, fetchPictures, deletePicture }}
+    >
       {children}
     </PictureContext.Provider>
   );
 };
-
 export const usePicture = (): PictureContextType => {
   const context = useContext(PictureContext);
   if (!context) {

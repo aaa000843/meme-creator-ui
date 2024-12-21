@@ -11,7 +11,8 @@ const ImageGallery: React.FC = () => {
   const { pictures, fetchPictures } = usePicture();
 
   const addImageToCanvas = async (url: string) => {
-    const image = await fabric.FabricImage.fromURL(url, {
+    const transformedUrl = `${url}?tr=w-800`;
+    const image = await fabric.FabricImage.fromURL(transformedUrl, {
       crossOrigin: 'anonymous',
     });
     state.canvas?.add(image);
