@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 
+import { cn } from '@/lib/utils';
+
+import Button from '@/components/buttons/Button';
 import NextImage from '@/components/NextImage';
 
 import { usePicture } from '@/contexts/Picture.context';
 
 const ImageUploadInput: React.FC = () => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const { uploadPicture } = usePicture();
@@ -24,6 +28,7 @@ const ImageUploadInput: React.FC = () => {
   const cancelSelection = () => {
     setSelectedImage(null);
     setSelectedFile(null);
+    if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
   const handleUpload = async () => {
@@ -39,12 +44,19 @@ const ImageUploadInput: React.FC = () => {
 
   return (
     <div className='flex flex-col items-center'>
-      <label className='cursor-pointer bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600'>
+      <label
+        className={cn(
+          'cursor-pointer bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600',
+          { ['disabled:bg-blue-300 opacity-25']: selectedFile },
+        )}
+      >
         <input
+          ref={fileInputRef}
           type='file'
           accept='image/*'
           className='hidden'
           onChange={handleImageChange}
+          disabled={!!selectedFile}
         />
         Upload Image
       </label>
@@ -58,10 +70,13 @@ const ImageUploadInput: React.FC = () => {
               alt='Selected'
               className='max-w-[200px] w-[200px] border rounded-lg'
             />
-            <button onClick={handleUpload} disabled={!selectedFile}>
-              COnfirm Upload
-            </button>
-            <button onClick={cancelSelection}>Not now</button>
+
+            <div className='flex justify-between mt-2'>
+              <Button onClick={handleUpload} disabled={!selectedFile}>
+                Confirm
+              </Button>
+              <Button onClick={cancelSelection}>Not now</Button>
+            </div>
           </div>
         </div>
       )}

@@ -26,7 +26,11 @@ import { useCanvasContext } from '@/contexts/Canvas.context';
 
 export default function HomePage() {
   const { state, dispatch } = useCanvasContext();
-  const [showDialog, setShowDialog] = React.useState<boolean>(false);
+  const [showImageGalleryDialog, setShowImageGalleryDialog] =
+    React.useState<boolean>(false);
+
+  const [showImageUploadDialog, setShowImageUploadDialog] =
+    React.useState<boolean>(false);
 
   const handleSave = () => {
     // Save logic here
@@ -43,11 +47,13 @@ export default function HomePage() {
           <div className='flex-grow container mx-auto p-4 flex'>
             <div className='w-[140px]'>
               <div className='flex-col'>
-                <Button onClick={() => setShowDialog(true)}>
+                <Button onClick={() => setShowImageGalleryDialog(true)}>
                   Show Gallery
                 </Button>
 
-                <ImageUploadInput />
+                <Button onClick={() => setShowImageUploadDialog(true)}>
+                  Upload Image
+                </Button>
                 <FontGallery />
                 {/* <HistoryPanel /> */}
               </div>
@@ -76,9 +82,9 @@ export default function HomePage() {
             onSave={handleSave}
           />
           <Dialog
-            isOpen={showDialog}
+            isOpen={showImageGalleryDialog}
             hasCloseBtn
-            onClose={() => setShowDialog(false)}
+            onClose={() => setShowImageGalleryDialog(false)}
             classes={{ modal: cn('') }}
           >
             <div className='p-2'>
@@ -86,6 +92,20 @@ export default function HomePage() {
             </div>
             <div className='p-2'>
               <ImageGallery />
+            </div>
+          </Dialog>
+
+          <Dialog
+            isOpen={showImageUploadDialog}
+            hasCloseBtn
+            onClose={() => setShowImageUploadDialog(false)}
+            classes={{ modal: cn('') }}
+          >
+            <div className='p-2'>
+              <Typo>Upload Image</Typo>
+            </div>
+            <div className='p-2'>
+              <ImageUploadInput />
             </div>
           </Dialog>
 
