@@ -10,9 +10,11 @@ import { axiosUtils } from '@/lib/axios/axios';
 import { request } from '@/lib/axios/request';
 import storage, { EStorageKey } from '@/lib/localStorage';
 
+import { User } from '@/models/user';
+
 interface AuthContextProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  user: any;
+  user: User | null;
   accessToken: string;
   login: (email: string, password: string) => Promise<void>;
   signup: (email: string, name: string, password: string) => Promise<void>;
@@ -28,7 +30,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [accessToken, setAccessToken] = useState<string>('');
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null);
 
   const login = async (email: string, password: string) => {
     const response = await request<{ accessToken: string }>('/auth/login', {
@@ -49,6 +51,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const logout = () => {
     setUser(null);
     localStorage.removeItem(EStorageKey.ACCESS_TOKEN);
+    axiosUtils.removeHeader('Authorization');
     request('/auth/logout');
   };
 
@@ -67,16 +70,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   const fetchMe = async () => {
-    const response = await request('/user/profile', {
+    const response = await request<User>('/user/profile', {
       method: 'GET',
     });
-    setUser(response.data);
+    setUser(response);
   };
 
   useEffect(() => {
     if (accessToken && !user) {
       storage.set(EStorageKey.ACCESS_TOKEN, accessToken);
       axiosUtils.setHeader('Authorization', `Bearer ${accessToken}`);
+      console.log('authenticaated');
       fetchMe();
     }
   }, [accessToken, user]);
