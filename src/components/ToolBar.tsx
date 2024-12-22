@@ -1,6 +1,7 @@
 import React from 'react';
 
-import logger from '@/lib/logger';
+import IconButton from '@/components/buttons/IconButton';
+import { IconMap } from '@/components/icons/Icon';
 
 import { useCanvasContext } from '@/contexts/Canvas.context';
 
@@ -33,52 +34,50 @@ const Toolbar: React.FC = () => {
 
   return (
     <div className='flex space-x-4 p-4 bg-gray-200'>
-      <button
-        onClick={() => {
-          dispatch({ type: 'ADD_TEXT' });
-          logger({ dispatch: 1 }, 'ToolBar.tsx line 20');
-        }}
-        className='bg-blue-500 text-white px-4 py-2 rounded'
-      >
-        Text
-      </button>
-      <button
-        onClick={() => dispatch({ type: 'ADD_RECTANGLE' })}
-        className='bg-blue-500 text-white px-4 py-2 rounded'
-      >
-        Rect
-      </button>
-      <button
-        className='px-4 py-2 bg-blue-600 text-white rounded'
-        onClick={() => dispatch({ type: 'OPEN_EXPORT_MODAL' })}
-      >
-        Export
-      </button>
-      <button
-        className='px-4 py-2 bg-green-600 text-white rounded'
-        onClick={() => dispatch({ type: 'OPEN_SAVE_MODAL' })}
-      >
-        Save
-      </button>
-      <button
-        className='px-4 py-2 bg-red-600 text-white'
-        onClick={handleDelete}
-      >
-        Delete
-      </button>
+      {/* <Button onClick={() => dispatch({ type: 'ADD_TEXT' })}>Text</Button> */}
+      <IconButton
+        icon={IconMap['text']}
+        title='Add Text'
+        variant='outline'
+        onClick={() => dispatch({ type: 'ADD_TEXT' })}
+      />
 
-      <button
-        className='px-4 py-2 bg-gray-600 text-white'
+      <IconButton
+        icon={IconMap['shapes']}
+        title='Add Rectangle'
+        variant='outline'
+        onClick={() => dispatch({ type: 'ADD_RECTANGLE' })}
+      />
+      <IconButton
+        icon={IconMap['export']}
+        title='Export'
+        variant='outline'
+        onClick={() => dispatch({ type: 'OPEN_EXPORT_MODAL' })}
+      />
+      <IconButton
+        icon={IconMap['save']}
+        title='Save'
+        variant='outline'
+        onClick={() => dispatch({ type: 'OPEN_SAVE_MODAL' })}
+      />
+      <IconButton
+        icon={IconMap['delete']}
+        title='Delete'
+        variant='outline'
+        onClick={handleDelete}
+      />
+      <IconButton
+        icon={IconMap['move-back']}
+        title='Move to Back'
+        variant='outline'
         onClick={handleMoveToBack}
-      >
-        Move Back
-      </button>
-      <button
-        className='px-4 py-2 bg-gray-800 text-white'
+      />
+      <IconButton
+        icon={IconMap['push-front']}
+        title='Move to Front'
+        variant='outline'
         onClick={handleMoveToFront}
-      >
-        Push Front
-      </button>
+      />
     </div>
   );
 };
