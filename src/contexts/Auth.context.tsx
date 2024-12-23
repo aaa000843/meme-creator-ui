@@ -49,10 +49,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   const logout = () => {
-    setUser(null);
-    localStorage.removeItem(EStorageKey.ACCESS_TOKEN);
+    storage.remove(EStorageKey.ACCESS_TOKEN);
     axiosUtils.removeHeader('Authorization');
-    request('/auth/logout');
+    setAccessToken('');
+    setUser(null);
   };
 
   const forgotPassword = async (email: string) => {
@@ -80,7 +80,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     if (accessToken && !user) {
       storage.set(EStorageKey.ACCESS_TOKEN, accessToken);
       axiosUtils.setHeader('Authorization', `Bearer ${accessToken}`);
-      console.log('authenticaated');
       fetchMe();
     }
   }, [accessToken, user]);

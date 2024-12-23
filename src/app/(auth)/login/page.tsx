@@ -3,6 +3,7 @@ import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
 import Button from '@/components/buttons/Button';
+import TextLink from '@/components/links/TextLink';
 
 import { useAuth } from '@/contexts/Auth.context';
 
@@ -44,6 +45,10 @@ const LoginPage: React.FC = () => {
           />
           <Button type='submit'>Login</Button>
         </form>
+        <div className='flex justify-between py-2'>
+          <TextLink href='/signup'>Sign up</TextLink>
+          <TextLink href='/forgot-password'>Forgot Password</TextLink>
+        </div>
         {error && <p>{error}</p>}
       </div>
     </div>

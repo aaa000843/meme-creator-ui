@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import React, { Suspense, useState } from 'react';
 
 import Button from '@/components/buttons/Button';
+import TextLink from '@/components/links/TextLink';
 
 import { useAuth } from '@/contexts/Auth.context';
 
@@ -48,6 +49,10 @@ const UpdatePasswordForm: React.FC = () => {
         </form>
         {message && <p>{message}</p>}
         {error && <p>{error}</p>}
+        <div className='flex justify-between py-2'>
+          <TextLink href='/login'>Login</TextLink>
+          <TextLink href='/signup'>Sign up</TextLink>
+        </div>
       </div>
     </div>
   );

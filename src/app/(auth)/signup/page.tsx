@@ -6,6 +6,7 @@ import React, { useState } from 'react';
 import { requestErrorMessage } from '@/lib/axios/request';
 
 import Button from '@/components/buttons/Button';
+import TextLink from '@/components/links/TextLink';
 
 import { useAuth } from '@/contexts/Auth.context';
 
@@ -59,6 +60,9 @@ const SignupPage: React.FC = () => {
           />
           <Button type='submit'>Sign up</Button>
         </form>
+        <div className='flex justify-between py-2 flex-row-reverse'>
+          <TextLink href='/login'>Login</TextLink>
+        </div>
         {error && <p>{error}</p>}
       </div>
     </div>

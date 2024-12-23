@@ -1,3 +1,5 @@
+export type UserRole = 'USER' | 'ADMIN';
+
 export interface User {
   _id: string;
   email: string;
@@ -5,6 +7,7 @@ export interface User {
   password?: string;
   createdAt: string;
   updatedAt: string;
+  role: UserRole;
   __v?: number; // Optional as it's MongoDB specific version key
 }
 
