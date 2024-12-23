@@ -5,6 +5,8 @@ import React, { useState } from 'react';
 
 import { requestErrorMessage } from '@/lib/axios/request';
 
+import Button from '@/components/buttons/Button';
+
 import { useAuth } from '@/contexts/Auth.context';
 
 const SignupPage: React.FC = () => {
@@ -31,32 +33,34 @@ const SignupPage: React.FC = () => {
 
   return (
     <div>
-      <h1>Signup</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type='email'
-          placeholder='Email'
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type='text'
-          placeholder='Name'
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
-        <input
-          type='password'
-          placeholder='Password'
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type='submit'>Signup</button>
-      </form>
-      {error && <p>{error}</p>}
+      <div className='border border-gray-700 rounded-lg p-2 w-fit mx-auto mt-[5rem]'>
+        <h1 className='mb-2'>Signup</h1>
+        <form className='flex flex-col gap-y-2' onSubmit={handleSubmit}>
+          <input
+            type='email'
+            placeholder='Email'
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type='text'
+            placeholder='Name'
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+          <input
+            type='password'
+            placeholder='Password'
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <Button type='submit'>Sign up</Button>
+        </form>
+        {error && <p>{error}</p>}
+      </div>
     </div>
   );
 };

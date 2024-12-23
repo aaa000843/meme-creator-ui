@@ -3,6 +3,8 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { Suspense, useState } from 'react';
 
+import Button from '@/components/buttons/Button';
+
 import { useAuth } from '@/contexts/Auth.context';
 
 const UpdatePasswordForm: React.FC = () => {
@@ -32,19 +34,21 @@ const UpdatePasswordForm: React.FC = () => {
 
   return (
     <div>
-      <h1>Update Password</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type='password'
-          placeholder='New Password'
-          value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
-          required
-        />
-        <button type='submit'>Update Password</button>
-      </form>
-      {message && <p>{message}</p>}
-      {error && <p>{error}</p>}
+      <div className='border border-gray-700 rounded-lg p-2 w-fit mx-auto mt-[5rem]'>
+        <h1 className='mb-2'>Update Password</h1>
+        <form className='flex flex-col gap-y-2' onSubmit={handleSubmit}>
+          <input
+            type='password'
+            placeholder='New Password'
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            required
+          />
+          <Button type='submit'>Update Password</Button>
+        </form>
+        {message && <p>{message}</p>}
+        {error && <p>{error}</p>}
+      </div>
     </div>
   );
 };
