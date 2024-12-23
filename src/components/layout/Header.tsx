@@ -9,7 +9,7 @@ import { useAuth } from '@/contexts/Auth.context';
 import { getVisibleLinks, NavLink } from '@/utils/navigation';
 
 const links: NavLink[] = [
-  { href: '/dashboard', label: 'Dashboard', authLevel: 'ADMIN' },
+  // { href: '/dashboard', label: 'Dashboard', authLevel: 'ADMIN' },
   { href: '/profile', label: 'Profile', authLevel: 'USER' },
   { href: '/edit-gallery', label: 'Admin Panel', authLevel: 'ADMIN' },
   { href: '/login', label: 'Login', authLevel: 'ONLY_AUTH' },

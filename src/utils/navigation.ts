@@ -30,12 +30,15 @@ export const getVisibleLinks = (
 ): NavLink[] => {
   return links.filter((link) => {
     if (userRole === 'ADMIN') {
-      return true;
+      return (
+        link.authLevel === 'USER' ||
+        link.authLevel === 'PUBLIC' ||
+        link.authLevel === 'ADMIN'
+      );
     }
     if (isAuthenticated) {
       return link.authLevel === 'USER' || link.authLevel === 'PUBLIC';
     }
-    if (!isAuthenticated)
-      return link.authLevel === 'PUBLIC' || link.authLevel === 'ONLY_AUTH';
+    return link.authLevel === 'PUBLIC' || link.authLevel === 'ONLY_AUTH';
   });
 };
