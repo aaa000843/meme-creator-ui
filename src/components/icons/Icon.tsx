@@ -5,6 +5,7 @@ import { FaShapes } from 'react-icons/fa';
 import { FaRegSave } from 'react-icons/fa';
 import { ImSpinner2 } from 'react-icons/im';
 import { ImCloudDownload } from 'react-icons/im';
+import { IoPricetagsOutline } from 'react-icons/io5';
 import {
   LuArrowLeft,
   LuArrowRight,
@@ -45,7 +46,8 @@ export type IconName =
   | 'save'
   | 'delete'
   | 'push-front'
-  | 'move-back';
+  | 'move-back'
+  | 'tag';
 
 export const IconMap: Record<IconName, IconType> = {
   'alarm-warning': RiAlarmWarningFill,
@@ -64,6 +66,7 @@ export const IconMap: Record<IconName, IconType> = {
   'move-back': PiSelectionBackground,
   'push-front': PiSelectionForegroundLight,
   delete: MdDeleteForever,
+  tag: IoPricetagsOutline,
 };
 
 const Icon: FC<IconProps> = (props) => {

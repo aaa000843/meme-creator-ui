@@ -11,6 +11,7 @@ const TagManagement: React.FC = () => {
 
   useEffect(() => {
     getTags();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleCreateTag = async () => {

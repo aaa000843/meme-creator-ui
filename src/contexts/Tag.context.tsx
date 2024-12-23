@@ -3,11 +3,11 @@ import React, { createContext, ReactNode, useContext, useState } from 'react';
 import { RequestError } from '@/lib/axios/@types';
 import { request, requestErrorMessage } from '@/lib/axios/request';
 
-import { Tag } from '@/models/tags';
+import { CreateTag, Tag } from '@/models/tags';
 
 interface TagContextType {
   tags: Tag[];
-  createTag: (tag: Omit<Tag, '_id'>) => Promise<void>;
+  createTag: (tag: CreateTag) => Promise<void>;
   updateTag: (id: string, updatedTag: Partial<Tag>) => Promise<void>;
   deleteTag: (id: string) => Promise<void>;
   getTags: () => Promise<void>;
@@ -26,7 +26,7 @@ export const TagProvider: React.FC<TagProviderProps> = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const createTag = async (tag: Omit<Tag, '_id'>): Promise<void> => {
+  const createTag = async (tag: CreateTag): Promise<void> => {
     setIsLoading(true);
     setError(null);
     try {

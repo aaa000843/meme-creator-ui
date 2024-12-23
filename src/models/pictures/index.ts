@@ -10,5 +10,14 @@ export interface Picture {
   thumbnailUrl: string;
   createdAt: string;
   updatedAt: string;
+  tags: string[];
   _id: string;
+}
+
+export type AssetVisibility = 'admin' | 'public' | 'private' | 'paid';
+
+export interface UpdatePictureDTO {
+  visibility?: AssetVisibility;
+  tags?: string[];
+  isTrashed?: boolean;
 }

@@ -2,13 +2,17 @@ import React, { createContext, ReactNode, useContext, useState } from 'react';
 
 import { request } from '@/lib/axios/request';
 
-import { Picture } from '@/models/pictures';
+import { Picture, UpdatePictureDTO } from '@/models/pictures';
 
 interface PictureContextType {
   pictures: Picture[];
   uploadPicture: (file: File) => Promise<void>;
   fetchPictures: () => Promise<void>;
   deletePicture: (id: string) => Promise<void>;
+  updatePicture: (
+    id: string,
+    updates: Partial<UpdatePictureDTO>,
+  ) => Promise<void>;
 }
 
 const PictureContext = createContext<PictureContextType | undefined>(undefined);
@@ -47,9 +51,28 @@ export const PictureProvider: React.FC<{ children: ReactNode }> = ({
     setPictures((prev) => prev.filter((picture) => picture._id !== id));
   };
 
+  const updatePicture = async (
+    id: string,
+    updates: Partial<UpdatePictureDTO>,
+  ) => {
+    const response = await request<Picture>(`/design-assets/${id}`, {
+      method: 'PATCH',
+      data: updates,
+    });
+    setPictures((prev) =>
+      prev.map((picture) => (picture._id === id ? response : picture)),
+    );
+  };
+
   return (
     <PictureContext.Provider
-      value={{ pictures, uploadPicture, fetchPictures, deletePicture }}
+      value={{
+        pictures,
+        uploadPicture,
+        fetchPictures,
+        deletePicture,
+        updatePicture,
+      }}
     >
       {children}
     </PictureContext.Provider>

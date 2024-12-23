@@ -3,13 +3,19 @@ import React, { useEffect, useState } from 'react';
 import IconButton from '@/components/buttons/IconButton';
 import { IconMap } from '@/components/icons/Icon';
 import NextImage from '@/components/NextImage';
+import PopoverModal from '@/components/PopoverModal';
+import { TagCloud } from '@/components/TagCloud';
 
 import { usePicture } from '@/contexts/Picture.context';
+import { useTag } from '@/contexts/Tag.context';
 
 const ImageGalleryCarousel: React.FC = () => {
-  const { pictures, fetchPictures, deletePicture } = usePicture();
+  const { pictures, fetchPictures, deletePicture, updatePicture } =
+    usePicture();
   const [page, setPage] = useState(1);
-  const [pageSize, _] = useState(10);
+  // const [pageSize, _] = useState(10);
+
+  const { tags, createTag } = useTag();
 
   useEffect(() => {
     fetchPictures();
@@ -17,6 +23,7 @@ const ImageGalleryCarousel: React.FC = () => {
     return () => {
       fetchPictures();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleDeleteImage = async (id: string) => {
@@ -38,17 +45,35 @@ const ImageGalleryCarousel: React.FC = () => {
               className='w-[6rem]'
               alt='Image'
             />
-            <div>
-              {/* {image.tags.map((tag) => (
-                <span key={tag}>{tag}</span>
-              ))} */}
+
+            <div className='flex justify-between'>
+              <PopoverModal
+                trigger={<IconButton icon={IconMap.tag} />}
+                className={{ modal: 'w-[500px] p-2' }}
+              >
+                <TagCloud
+                  tags={tags ?? []}
+                  tagItems={image.tags || []}
+                  onCreateNewTag={(name) => createTag({ name })}
+                  onAddTag={(tagSlug) =>
+                    updatePicture(image._id, {
+                      tags: [...(image.tags || []), tagSlug],
+                    })
+                  }
+                  onRemoveTag={(tagSlug) =>
+                    updatePicture(image._id, {
+                      tags: (image.tags || []).filter((tag) => tag !== tagSlug),
+                    })
+                  }
+                />
+              </PopoverModal>
+              <IconButton
+                title='delete'
+                icon={IconMap['delete']}
+                variant='outline'
+                onClick={() => handleDeleteImage(image._id)}
+              />
             </div>
-            <IconButton
-              title='delete'
-              icon={IconMap['delete']}
-              variant='outline'
-              onClick={() => handleDeleteImage(image._id)}
-            />
           </div>
         ))}
       </div>
