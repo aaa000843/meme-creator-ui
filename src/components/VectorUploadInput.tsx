@@ -1,5 +1,7 @@
 import React, { useRef, useState } from 'react';
 
+import { convertSVGToDataURL } from '@/lib/helper';
+
 import Button from '@/components/buttons/Button';
 import NextImage from '@/components/NextImage';
 
@@ -72,7 +74,7 @@ const VectorUploadInput: React.FC = () => {
       {selectedSVG && (
         <div className='mt-4'>
           <NextImage
-            src={`data:image/svg+xml;utf8,${encodeURIComponent(selectedSVG)}`}
+            src={convertSVGToDataURL(selectedSVG)}
             alt={`Uploaded SVG - ${vectorName}`}
             width={200}
             height={200}

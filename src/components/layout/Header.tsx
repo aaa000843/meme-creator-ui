@@ -11,7 +11,8 @@ import { getVisibleLinks, NavLink } from '@/utils/navigation';
 const links: NavLink[] = [
   // { href: '/dashboard', label: 'Dashboard', authLevel: 'ADMIN' },
   { href: '/profile', label: 'Profile', authLevel: 'USER' },
-  { href: '/edit-gallery', label: 'Admin Panel', authLevel: 'ADMIN' },
+  { href: '/edit-images', label: 'Images', authLevel: 'ADMIN' },
+  { href: '/edit-vectors', label: 'Vectors', authLevel: 'ADMIN' },
   { href: '/login', label: 'Login', authLevel: 'ONLY_AUTH' },
 ];
 

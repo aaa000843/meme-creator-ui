@@ -23,7 +23,7 @@ export const VectorProvider: React.FC<{ children: ReactNode }> = ({
   const [vectors, setVectors] = useState<Vector[]>([]);
 
   const uploadVector = async (dto: CreateVectorDTO) => {
-    const response = await request<Vector>('/vectors/upload', {
+    const response = await request<Vector>('/vectors', {
       method: 'POST',
       data: dto,
     });

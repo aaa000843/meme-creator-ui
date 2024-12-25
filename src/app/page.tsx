@@ -18,7 +18,6 @@ import PropertiesPanel from '@/components/user-canvas/PropertyPanel';
 import Toolbar from '@/components/user-canvas/ToolBar';
 import DesignCanvas from '@/components/user-canvas/UserCanvas';
 import VectorGallery from '@/components/user-canvas/VectorGallery';
-import VectorUploadInput from '@/components/VectorUploadInput';
 
 import { useCanvasContext } from '@/contexts/Canvas.context';
 
@@ -63,7 +62,6 @@ export default function HomePage() {
                 <Button onClick={() => setShowVectorGalleryDialog(true)}>
                   Show Vector
                 </Button>
-                <VectorUploadInput />
                 <FontGallery />
                 {/* <HistoryPanel /> */}
               </div>

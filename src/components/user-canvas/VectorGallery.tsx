@@ -1,29 +1,25 @@
 import * as fabric from 'fabric';
 import React, { useEffect } from 'react';
 
+import { convertSVGToDataURL } from '@/lib/helper';
+
 import NextImage from '@/components/NextImage';
 
 import { useCanvasContext } from '@/contexts/Canvas.context';
 import { useVector } from '@/contexts/Vector.context';
-
-// eslint-disable-next-line no-useless-escape
 
 const VectorGallery: React.FC = () => {
   const { state } = useCanvasContext();
   const { vectors, fetchVectors } = useVector();
 
   const addVectorToCanvas = async (svgString: string) => {
-    fabric.loadSVGFromString(svgString, (objects, options) => {
-      if (Array.isArray(objects) && objects.length > 0) {
-        const obj = fabric.util.groupSVGElements(objects, options);
-        obj.set({ left: 10, top: 10 }).setCoords();
+    const objs = await fabric.loadSVGFromString(svgString);
+    const obj = fabric.util.groupSVGElements(objs.objects as fabric.Object[]);
 
-        state.canvas?.add(obj);
-        state.canvas?.renderAll();
-      } else {
-        console.error('No valid SVG objects found');
-      }
-    });
+    obj.set({ left: 10, top: 10 }).scaleToHeight(50);
+
+    state.canvas?.add(obj);
+    state.canvas?.renderAll();
   };
 
   useEffect(() => {
@@ -32,6 +28,7 @@ const VectorGallery: React.FC = () => {
     return () => {
       fetchVectors();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -41,8 +38,8 @@ const VectorGallery: React.FC = () => {
         {vectors.map((vector, index) => (
           <NextImage
             useSkeleton
-            key={index}
-            src={`data:image/svg+xml;utf8,${encodeURIComponent(vector.svg)}`} // Changed from vector.url to vector.svg
+            key={vector._id}
+            src={convertSVGToDataURL(vector.svg)}
             alt={`Vector ${index + 1}: ${vector.name}`}
             width={100}
             height={100}

@@ -11,3 +11,8 @@ export function getFromSessionStorage(key: string): string | null {
   }
   return null;
 }
+
+// src/lib/utils.ts
+export const convertSVGToDataURL = (svgString: string): string => {
+  return `data:image/svg+xml;utf8,${encodeURIComponent(svgString)}`;
+};
