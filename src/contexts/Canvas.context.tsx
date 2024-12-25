@@ -1,6 +1,8 @@
 import * as fabric from 'fabric';
 import React, { createContext, ReactNode, useContext, useReducer } from 'react';
 
+import { Shape, Text } from '@/constant/canvas.constant';
+
 interface CanvasState {
   canvas: fabric.Canvas | null;
   history: {
@@ -48,7 +50,7 @@ const canvasReducer = (state: CanvasState, action: Action): CanvasState => {
       return { ...state, canvas: action.canvas };
     case 'ADD_TEXT':
       if (state.canvas) {
-        const text = new fabric.IText('New Text', {
+        const text = new fabric.IText(Text.text, {
           left: 50,
           top: 50,
           fontSize: 20,
@@ -69,7 +71,7 @@ const canvasReducer = (state: CanvasState, action: Action): CanvasState => {
         const rect = new fabric.Rect({
           left: 50,
           top: 50,
-          fill: 'blue',
+          fill: Shape.fill,
           width: 100,
           height: 100,
         });

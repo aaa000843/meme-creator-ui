@@ -4,9 +4,12 @@ import React, { useEffect, useState } from 'react';
 
 import logger from '@/lib/logger';
 
+import { Shape, Text } from '@/constant/canvas.constant';
 import { useCanvasContext } from '@/contexts/Canvas.context';
 
-const propertyMap: { [key: string]: string } = {
+const propertyMap: {
+  [key: string]: string | ((obj: fabric.FabricObject) => unknown);
+} = {
   left: 'left',
   top: 'top',
   width: 'width',
@@ -26,6 +29,7 @@ const propertyMap: { [key: string]: string } = {
   shadowOffsetX: 'shadow.offsetX',
   shadowOffsetY: 'shadow.offsetY',
   shadowBlur: 'shadow.blur',
+  // setText: (text) => text.set,
 };
 
 const PropertiesPanel: React.FC = () => {
@@ -40,7 +44,7 @@ const PropertiesPanel: React.FC = () => {
     width: 0,
     height: 0,
     angle: 0,
-    fill: '',
+    fill: Shape.fill,
     stroke: '',
     strokeWidth: 1,
     fontFamily: '',
@@ -54,6 +58,7 @@ const PropertiesPanel: React.FC = () => {
     shadowOffsetX: 0,
     shadowOffsetY: 0,
     shadowBlur: 0,
+    textValue: '',
   });
 
   useEffect(() => {
@@ -86,6 +91,7 @@ const PropertiesPanel: React.FC = () => {
           shadowOffsetX: activeObject.shadow?.offsetX ?? 0,
           shadowOffsetY: activeObject.shadow?.offsetY ?? 0,
           shadowBlur: activeObject.shadow?.blur ?? 0,
+          textValue: (activeObject as fabric.Text).text ?? [Text.text],
         });
       }
     };
@@ -114,9 +120,18 @@ const PropertiesPanel: React.FC = () => {
       [property]: value,
     }));
 
-    if (selectedObject) {
-      set(selectedObject, mappedProperty, value);
-      state.canvas?.renderAll();
+    if (selectedObject && state.canvas) {
+      const activeObject =
+        state.canvas.getActiveObject() as fabric.FabricObject;
+      if (typeof mappedProperty === 'function') {
+        const result = mappedProperty(activeObject);
+        if (typeof result === 'function') {
+          result(value);
+        }
+      } else if (mappedProperty) {
+        set(selectedObject, mappedProperty, value);
+      }
+      state.canvas.renderAll();
     }
   };
 
@@ -200,6 +215,18 @@ const PropertiesPanel: React.FC = () => {
                 onChange={(e) =>
                   handleChange('fontSize', parseFloat(e.target.value))
                 }
+              />
+            </div>
+            <div>
+              <label>Text:</label>
+              <input
+                value={properties.textValue ?? ''}
+                onChange={(e) => {
+                  const textValues = e.target.value;
+                  const text = state.canvas?.getActiveObject() as fabric.Text;
+                  text.set('text', textValues);
+                  handleChange('textValue', textValues);
+                }}
               />
             </div>
           </div>
