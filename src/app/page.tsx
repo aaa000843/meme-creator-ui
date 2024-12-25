@@ -7,16 +7,17 @@ import { cn } from '@/lib/utils';
 
 import Button from '@/components/buttons/Button';
 import Dialog from '@/components/Dialog';
-import ExportModal from '@/components/ExportModal';
 import FontGallery from '@/components/FontGallery';
-import ImageGallery from '@/components/ImageGallery';
 import ImageUploadInput from '@/components/ImageUploadInput';
 import Header from '@/components/layout/Header';
-import PropertiesPanel from '@/components/PropertyPanel';
 import SaveConfirmationModal from '@/components/SaveConfirmationModal';
-import Toolbar from '@/components/ToolBar';
 import Typo from '@/components/typography/Typo';
-import DesignCanvas from '@/components/UserCanvas';
+import ExportModal from '@/components/user-canvas/ExportModal';
+import ImageGallery from '@/components/user-canvas/ImageGallery';
+import PropertiesPanel from '@/components/user-canvas/PropertyPanel';
+import Toolbar from '@/components/user-canvas/ToolBar';
+import DesignCanvas from '@/components/user-canvas/UserCanvas';
+import VectorGallery from '@/components/user-canvas/VectorGallery';
 
 import { useCanvasContext } from '@/contexts/Canvas.context';
 
@@ -30,6 +31,9 @@ export default function HomePage() {
     React.useState<boolean>(false);
 
   const [showImageUploadDialog, setShowImageUploadDialog] =
+    React.useState<boolean>(false);
+
+  const [showVectorGalleryDialog, setShowVectorGalleryDialog] =
     React.useState<boolean>(false);
 
   const handleSave = () => {
@@ -53,6 +57,10 @@ export default function HomePage() {
 
                 <Button onClick={() => setShowImageUploadDialog(true)}>
                   Upload Image
+                </Button>
+
+                <Button onClick={() => setShowVectorGalleryDialog(true)}>
+                  Show Vector
                 </Button>
                 <FontGallery />
                 {/* <HistoryPanel /> */}
@@ -92,6 +100,20 @@ export default function HomePage() {
             </div>
             <div className='p-2'>
               <ImageGallery />
+            </div>
+          </Dialog>
+
+          <Dialog
+            isOpen={showVectorGalleryDialog}
+            hasCloseBtn
+            onClose={() => setShowVectorGalleryDialog(false)}
+            classes={{ modal: cn('') }}
+          >
+            <div className='p-2'>
+              <Typo>Vector gallery</Typo>
+            </div>
+            <div className='p-2'>
+              <VectorGallery />
             </div>
           </Dialog>
 
