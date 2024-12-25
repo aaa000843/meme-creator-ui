@@ -7,6 +7,7 @@ import { CanvasProvider } from '@/contexts/Canvas.context';
 import { ColorModeProvider } from '@/contexts/ColorModeContext';
 import { PictureProvider } from '@/contexts/Picture.context';
 import { TagProvider } from '@/contexts/Tag.context';
+import { VectorProvider } from '@/contexts/Vector.context';
 
 export const AppProviders: FC<PropsWithChildren> = ({ children }) => {
   return (
@@ -14,7 +15,9 @@ export const AppProviders: FC<PropsWithChildren> = ({ children }) => {
       <CanvasProvider>
         <TagProvider>
           <PictureProvider>
-            <ColorModeProvider>{children}</ColorModeProvider>
+            <VectorProvider>
+              <ColorModeProvider>{children}</ColorModeProvider>
+            </VectorProvider>
           </PictureProvider>
         </TagProvider>
       </CanvasProvider>
