@@ -32,6 +32,8 @@ const VectorUploadInput: React.FC = () => {
         setVectorName('');
         if (fileInputRef.current) fileInputRef.current.value = '';
       } catch (err) {
+        // TODO: Remove this once we have a proper error handling, by adding a toast
+        // eslint-disable-next-line no-console
         console.error(err);
       }
     }

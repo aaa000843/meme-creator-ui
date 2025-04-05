@@ -17,6 +17,8 @@ const RecentUploads: React.FC = () => {
         const response = await axios.get('/api/images/recent');
         setRecentImages(response.data.images);
       } catch (error) {
+        // TODO: Remove this once we have a proper error handling, by adding a toast
+        // eslint-disable-next-line no-console
         console.error('Error fetching recent images', error);
       }
     };

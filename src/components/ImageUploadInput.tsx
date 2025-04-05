@@ -37,6 +37,8 @@ const ImageUploadInput: React.FC = () => {
         await uploadPicture(selectedFile);
         cancelSelection();
       } catch (err) {
+        // TODO: Remove this once we have a proper error handling, by adding a toast
+        // eslint-disable-next-line no-console
         console.error(err);
       }
     }
