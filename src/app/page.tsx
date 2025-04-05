@@ -1,8 +1,6 @@
 'use client';
 
-import Head from 'next/head';
 import * as React from 'react';
-
 import { cn } from '@/lib/utils';
 
 import Button from '@/components/buttons/Button';
@@ -10,6 +8,7 @@ import Dialog from '@/components/Dialog';
 import FontGallery from '@/components/FontGallery';
 import ImageUploadInput from '@/components/ImageUploadInput';
 import Header from '@/components/layout/Header';
+import Footer from '@/components/layout/Footer';
 import SaveConfirmationModal from '@/components/SaveConfirmationModal';
 import Typo from '@/components/typography/Typo';
 import ExportModal from '@/components/user-canvas/ExportModal';
@@ -27,113 +26,131 @@ import { useCanvasContext } from '@/contexts/Canvas.context';
 
 export default function HomePage() {
   const { state, dispatch } = useCanvasContext();
-  const [showImageGalleryDialog, setShowImageGalleryDialog] =
-    React.useState<boolean>(false);
-
-  const [showImageUploadDialog, setShowImageUploadDialog] =
-    React.useState<boolean>(false);
-
-  const [showVectorGalleryDialog, setShowVectorGalleryDialog] =
-    React.useState<boolean>(false);
+  const [showImageGalleryDialog, setShowImageGalleryDialog] = React.useState<boolean>(false);
+  const [showImageUploadDialog, setShowImageUploadDialog] = React.useState<boolean>(false);
+  const [showVectorGalleryDialog, setShowVectorGalleryDialog] = React.useState<boolean>(false);
 
   const handleSave = () => {
     // Save logic here
   };
 
   return (
-    <main>
-      <Head>
-        <title>Hi</title>
-      </Head>
+    <div className="flex flex-col min-h-screen bg-gray-50">
       <Header />
-      <section className='bg-white'>
-        <div className='layout relative flex min-h-screen flex-col items-center justify-center py-12 text-center'>
-          <div className='flex-grow container mx-auto p-4 flex'>
-            <div className='w-[140px]'>
-              <div className='flex-col'>
-                <Button onClick={() => setShowImageGalleryDialog(true)}>
-                  Show Gallery
+      
+      <main className="flex-grow pt-6">
+        {/* Toolbar Section */}
+        <div className="bg-white border-b sticky top-16 z-40">
+          <div className="container mx-auto px-4 py-2">
+            <Toolbar />
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <div className="container mx-auto px-4 py-6">
+          <div className="flex flex-col lg:flex-row gap-6">
+            {/* Left Sidebar */}
+            <div className="w-full lg:w-[240px] space-y-4">
+              <div className="bg-white rounded-xl shadow-sm p-4 space-y-3">
+                <h2 className="font-semibold text-lg text-gray-800 mb-2">Tools</h2>
+                <Button 
+                  onClick={() => setShowImageGalleryDialog(true)}
+                  className="w-full border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white 
+                    active:bg-blue-700 active:border-blue-700 transition-all duration-200"
+                >
+                  Image Gallery
                 </Button>
 
-                <Button onClick={() => setShowImageUploadDialog(true)}>
+                <Button 
+                  onClick={() => setShowImageUploadDialog(true)}
+                  className="w-full border-2 border-green-600 text-green-600 hover:bg-green-600 hover:text-white 
+                    active:bg-green-700 active:border-green-700 transition-all duration-200"
+                >
                   Upload Image
                 </Button>
 
-                <Button onClick={() => setShowVectorGalleryDialog(true)}>
-                  Show Vector
+                <Button 
+                  onClick={() => setShowVectorGalleryDialog(true)}
+                  className="w-full border-2 border-purple-600 text-purple-600 hover:bg-purple-600 hover:text-white 
+                    active:bg-purple-700 active:border-purple-700 transition-all duration-200"
+                >
+                  Vector Gallery
                 </Button>
+              </div>
+
+              <div className="bg-white rounded-xl shadow-sm p-4">
+                <h2 className="font-semibold text-lg text-gray-800 mb-4">Font Styles</h2>
                 <FontGallery />
-                {/* <HistoryPanel /> */}
               </div>
             </div>
 
-            <div className='flex-col'>
-              <div className='overflow-x-scroll'>
-                <Toolbar />
+            {/* Main Canvas Area */}
+            <div className="flex-1 min-w-0">
+              <div className="bg-white rounded-xl shadow-sm p-6">
+                <div className="aspect-w-16 aspect-h-9 bg-gray-50 rounded-lg overflow-hidden">
+                  <DesignCanvas />
+                </div>
               </div>
-
-              <DesignCanvas />
             </div>
 
-            <div className='w-[240px]'>
-              <PropertiesPanel />
+            {/* Right Sidebar */}
+            <div className="w-full lg:w-[280px]">
+              <div className="bg-white rounded-xl shadow-sm p-4">
+                <h2 className="font-semibold text-lg text-gray-800 mb-4">Properties</h2>
+                <PropertiesPanel />
+              </div>
             </div>
           </div>
-
-          <ExportModal
-            isOpen={state.isExportModalOpen}
-            onClose={() => dispatch({ type: 'CLOSE_EXPORT_MODAL' })}
-          />
-          <SaveConfirmationModal
-            isOpen={state.isSaveModalOpen}
-            onClose={() => dispatch({ type: 'CLOSE_SAVE_MODAL' })}
-            onSave={handleSave}
-          />
-          <Dialog
-            isOpen={showImageGalleryDialog}
-            hasCloseBtn
-            onClose={() => setShowImageGalleryDialog(false)}
-            classes={{ modal: cn('') }}
-          >
-            <div className='p-2'>
-              <Typo>Image gallery</Typo>
-            </div>
-            <div className='p-2'>
-              <ImageGallery />
-            </div>
-          </Dialog>
-
-          <Dialog
-            isOpen={showVectorGalleryDialog}
-            hasCloseBtn
-            onClose={() => setShowVectorGalleryDialog(false)}
-            classes={{ modal: cn('') }}
-          >
-            <div className='p-2'>
-              <Typo>Vector gallery</Typo>
-            </div>
-            <div className='p-2'>
-              <VectorGallery />
-            </div>
-          </Dialog>
-
-          <Dialog
-            isOpen={showImageUploadDialog}
-            hasCloseBtn
-            onClose={() => setShowImageUploadDialog(false)}
-            classes={{ modal: cn('') }}
-          >
-            <div className='p-2'>
-              <Typo>Upload Image</Typo>
-            </div>
-            <div className='p-2'>
-              <ImageUploadInput />
-            </div>
-          </Dialog>
-
-          <footer className='absolute bottom-2 text-gray-700'></footer>
         </div>
-      </section>
-    </main>
+
+        {/* Modals */}
+        <ExportModal
+          isOpen={state.isExportModalOpen}
+          onClose={() => dispatch({ type: 'CLOSE_EXPORT_MODAL' })}
+        />
+        <SaveConfirmationModal
+          isOpen={state.isSaveModalOpen}
+          onClose={() => dispatch({ type: 'CLOSE_SAVE_MODAL' })}
+          onSave={handleSave}
+        />
+        <Dialog
+          isOpen={showImageGalleryDialog}
+          hasCloseBtn
+          onClose={() => setShowImageGalleryDialog(false)}
+          classes={{ modal: cn('max-w-4xl') }}
+        >
+          <div className="p-6">
+            <h2 className="text-2xl font-semibold mb-6">Image Gallery</h2>
+            <ImageGallery />
+          </div>
+        </Dialog>
+
+        <Dialog
+          isOpen={showVectorGalleryDialog}
+          hasCloseBtn
+          onClose={() => setShowVectorGalleryDialog(false)}
+          classes={{ modal: cn('max-w-4xl') }}
+        >
+          <div className="p-6">
+            <h2 className="text-2xl font-semibold mb-6">Vector Gallery</h2>
+            <VectorGallery />
+          </div>
+        </Dialog>
+
+        <Dialog
+          isOpen={showImageUploadDialog}
+          hasCloseBtn
+          onClose={() => setShowImageUploadDialog(false)}
+          classes={{ modal: cn('max-w-2xl') }}
+        >
+          <div className="p-6">
+            <h2 className="text-2xl font-semibold mb-6">Upload Image</h2>
+            <ImageUploadInput />
+          </div>
+        </Dialog>
+      </main>
+      
+      <Footer />
+    </div>
   );
 }

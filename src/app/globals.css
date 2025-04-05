@@ -1,0 +1,124 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-rgb: 245, 247, 250;
+  --primary-color: #2563eb;
+  --primary-hover: #1d4ed8;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: rgb(var(--background-rgb));
+}
+
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply antialiased;
+  }
+
+  button {
+    @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+  }
+}
+
+@layer components {
+  .container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg shadow-sm transition-colors duration-200;
+  }
+
+  .btn-primary {
+    @apply bg-blue-600 text-white hover:bg-blue-700;
+  }
+
+  .btn-secondary {
+    @apply bg-white text-gray-700 border-gray-300 hover:bg-gray-50;
+  }
+
+  .card {
+    @apply bg-white rounded-xl shadow-sm;
+  }
+
+  .input {
+    @apply block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500;
+  }
+
+  /* Toolbar Styles */
+  .toolbar-btn {
+    @apply relative transition-all duration-200 rounded-md;
+    @apply p-1.5 min-w-[32px] min-h-[32px] flex items-center justify-center;
+    @apply hover:shadow-sm active:scale-95;
+  }
+
+  .toolbar-btn:disabled {
+    @apply opacity-50 cursor-not-allowed;
+    @apply hover:shadow-none active:scale-100;
+  }
+
+  .toolbar-btn svg {
+    @apply w-4 h-4 transition-transform duration-200;
+  }
+
+  .toolbar-btn:hover:not(:disabled) svg {
+    @apply scale-110;
+  }
+
+  /* Animation for toolbar buttons */
+  @keyframes toolbarButtonPop {
+    0% {
+      transform: scale(1);
+    }
+
+    50% {
+      transform: scale(1.05);
+    }
+
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  .toolbar-btn:active:not(:disabled) {
+    animation: toolbarButtonPop 0.15s ease-in-out;
+  }
+
+  .toolbar-btn .tooltip {
+    @apply absolute -bottom-6 left-1/2 transform -translate-x-1/2 px-1.5 py-0.5;
+    @apply bg-gray-800 text-white text-xs rounded opacity-0 transition-opacity duration-200;
+    @apply pointer-events-none whitespace-nowrap z-50;
+  }
+
+  .toolbar-btn:hover:not(:disabled) .tooltip {
+    @apply opacity-100;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
+}

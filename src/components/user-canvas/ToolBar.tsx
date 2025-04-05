@@ -16,6 +16,7 @@ const Toolbar: React.FC = () => {
       state.canvas?.renderAll();
     }
   };
+
   const handleMoveToBack = () => {
     const activeObject = state.canvas?.getActiveObject();
     if (activeObject) {
@@ -33,51 +34,69 @@ const Toolbar: React.FC = () => {
   };
 
   return (
-    <div className='flex space-x-4 p-4 bg-gray-200'>
-      {/* <Button onClick={() => dispatch({ type: 'ADD_TEXT' })}>Text</Button> */}
-      <IconButton
-        icon={IconMap['text']}
-        title='Add Text'
-        variant='outline'
-        onClick={() => dispatch({ type: 'ADD_TEXT' })}
-      />
+    <div className='p-2 bg-white rounded-lg shadow-lg'>
+      <div className='flex items-center'>
+        {/* Content Creation Group */}
+        <div className='flex gap-1 pr-2 border-r border-gray-200'>
+          <IconButton
+            icon={IconMap['text']}
+            title='Add Text'
+            variant='outline'
+            className='toolbar-btn text-blue-600 hover:bg-blue-50 active:bg-blue-100 border-blue-200'
+            onClick={() => dispatch({ type: 'ADD_TEXT' })}
+          />
+          <IconButton
+            icon={IconMap['shapes']}
+            title='Add Shape'
+            variant='outline'
+            className='toolbar-btn text-purple-600 hover:bg-purple-50 active:bg-purple-100 border-purple-200'
+            onClick={() => dispatch({ type: 'ADD_RECTANGLE' })}
+          />
+        </div>
 
-      <IconButton
-        icon={IconMap['shapes']}
-        title='Add Rectangle'
-        variant='outline'
-        onClick={() => dispatch({ type: 'ADD_RECTANGLE' })}
-      />
-      <IconButton
-        icon={IconMap['export']}
-        title='Export'
-        variant='outline'
-        onClick={() => dispatch({ type: 'OPEN_EXPORT_MODAL' })}
-      />
-      <IconButton
-        icon={IconMap['save']}
-        title='Save'
-        variant='outline'
-        onClick={() => dispatch({ type: 'OPEN_SAVE_MODAL' })}
-      />
-      <IconButton
-        icon={IconMap['delete']}
-        title='Delete'
-        variant='outline'
-        onClick={handleDelete}
-      />
-      <IconButton
-        icon={IconMap['move-back']}
-        title='Move to Back'
-        variant='outline'
-        onClick={handleMoveToBack}
-      />
-      <IconButton
-        icon={IconMap['push-front']}
-        title='Move to Front'
-        variant='outline'
-        onClick={handleMoveToFront}
-      />
+        {/* Object Manipulation Group */}
+        <div className='flex gap-1 px-2 border-r border-gray-200'>
+          <IconButton
+            icon={IconMap['delete']}
+            title='Delete'
+            variant='outline'
+            className='toolbar-btn text-red-600 hover:bg-red-50 active:bg-red-100 border-red-200'
+            onClick={handleDelete}
+          />
+          <IconButton
+            icon={IconMap['move-back']}
+            title='Send Backward'
+            variant='outline'
+            className='toolbar-btn text-indigo-600 hover:bg-indigo-50 active:bg-indigo-100 border-indigo-200'
+            onClick={handleMoveToBack}
+          />
+          <IconButton
+            icon={IconMap['push-front']}
+            title='Bring Forward'
+            variant='outline'
+            className='toolbar-btn text-indigo-600 hover:bg-indigo-50 active:bg-indigo-100 border-indigo-200'
+            onClick={handleMoveToFront}
+          />
+        </div>
+
+        {/* Project Actions Group */}
+        <div className='flex gap-1 pl-2'>
+          <IconButton
+            icon={IconMap['export']}
+            title='Export'
+            variant='outline'
+            className='toolbar-btn text-green-600 hover:bg-green-50 active:bg-green-100 border-green-200'
+            onClick={() => dispatch({ type: 'OPEN_EXPORT_MODAL' })}
+          />
+          <IconButton
+            icon={IconMap['save']}
+            title='Save'
+            variant='outline'
+            className='toolbar-btn text-amber-600 hover:bg-amber-50 active:bg-amber-100 border-amber-200'
+            onClick={() => dispatch({ type: 'OPEN_SAVE_MODAL' })}
+          />
+        </div>
+      </div>
     </div>
   );
 };
